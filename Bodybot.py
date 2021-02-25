@@ -2,7 +2,7 @@ import telebot
 
 
 with open('D:\\Python\\_1_\\_bot\\secrets.py') as inf:
-    a = inf.read()
+    a = inf.read().strip()
 
 
 bot = telebot.TeleBot(a)
