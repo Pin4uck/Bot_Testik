@@ -1,7 +1,7 @@
 import telebot
 
 
-with open('secrets.py') as inf:
+with open('secrets.txt') as inf:
     a = inf.read().strip()
 
 
