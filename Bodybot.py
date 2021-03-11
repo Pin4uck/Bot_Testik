@@ -1,19 +1,82 @@
 import telebot
+from exchange import secrets
+from exchange import pb
 
 
-with open('secrets.txt') as inf:
-    a = inf.read().strip()
-
-
-bot = telebot.TeleBot(a)
+bot = telebot.TeleBot(secrets.TOKEN)
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
 keyboard1.row('Привет', 'Пока')
 
 
 @bot.message_handler(commands=['start'])
-def start_message(message):
-    print(message.from_user)
-    bot.send_message(message.chat.id, 'Привет, ты написал мне /start', reply_markup=keyboard1)
+def start_command(message):
+    bot.send_message(
+        message.chat.id,
+        'Привет! Я могу показать вам курсы валют.\n' +
+        'Чтобы узнать курсы валют, нажмите /exchange.\n' +
+        'Чтобы получить помощь, нажмите /help.'
+    )
+
+
+@bot.message_handler(commands=['help'])
+def help_command(message):
+    keyboard = telebot.types.InlineKeyboardMarkup()
+    keyboard.add(
+        telebot.types.InlineKeyboardButton(
+            'Написать разработчику', url='t.me/pin4uck'
+        )
+    )
+    bot.send_message(
+        message.chat.id,
+        '1) Чтобы получить список доступных волют, нажмите /exchange.\n' +
+        '2) Нажмите на интересующую вас валюту.\n' +
+        '3) Вы получите сообщение, содержащее информацию об курсе валюты, установленным Национальным банком РБ.\n',
+        reply_markup=keyboard
+    )
+
+
+@bot.message_handler(commands=['exchange'])
+def exchange_command(message):
+    keyboard = telebot.types.InlineKeyboardMarkup()
+    keyboard.row(
+            telebot.types.InlineKeyboardButton('USD', callback_data='get-USD')
+    )
+    keyboard.row(
+            telebot.types.InlineKeyboardButton('EUR', callback_data='get-EUR'),
+            telebot.types.InlineKeyboardButton('RUB', callback_data='get-RUB')
+    )
+    bot.send_message(
+            message.chat.id,
+            'Нажмите на необходимую валюту:',
+            reply_markup=keyboard
+    )
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def iq_callback(query):
+    data = query.data
+    if data.startswith('get-'):
+        get_ex_callback(query)
+
+
+def get_ex_callback(query):
+    bot.answer_callback_query(query.id)
+    send_exchange_result(query.message, query.data[4:])
+
+
+def send_exchange_result(message, ex_code):
+    bot.send_chat_action(message.chat.id, 'typing')
+    ex = pb.get_exchange(ex_code)
+    bot.send_message(
+        message.chat.id, serialize_ex(ex),
+        parse_mode='HTML'
+    )
+
+
+def serialize_ex(ex_json, diff=None):
+    result = '<b>' + ex_json['Cur_Abbreviation'] + ' -> ' + 'BYN' + ':</b>\n\n' + \
+             'Rate: ' + str(ex_json['Cur_OfficialRate'])
+    return result
 
 
 @bot.message_handler(content_types=['text'])
@@ -31,4 +94,4 @@ def sticker_id(message):
     print(message)
 
 
-bot.polling()
+bot.polling(none_stop=True)
