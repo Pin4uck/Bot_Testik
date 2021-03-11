@@ -1,7 +1,7 @@
 import telebot
 
 
-with open('D:\\Python\\_1_\\_bot\\secrets.py') as inf:
+with open('secrets.txt') as inf:
     a = inf.read().strip()
 
 
