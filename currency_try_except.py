@@ -44,5 +44,3 @@ def inquiry(s):
     result = 'Ошибка приложения'
     return result
 
-
-inquiry(input())
