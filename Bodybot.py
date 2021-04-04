@@ -73,7 +73,7 @@ def send_exchange_result(message, ex_code):
     )
 
 
-def serialize_ex(ex_json, diff=None):
+def serialize_ex(ex_json):
     result = '<b>' + ex_json['Cur_Abbreviation'] + ' -> ' + 'BYN' + ':</b>\n\n' + \
              'Rate: ' + str(ex_json['Cur_OfficialRate'])
     return result
