@@ -24,7 +24,7 @@ def inquiry(s):
         return row[0][0]
     try:
         idd, abbr, ofcrate = pb.get_exchanges(s)
-        curs.execute(f'''INSERT INTO ccy VALUES({idd}, '{abbr}', {ofcrate}, strftime("%s"))  
+        curs.execute(f'''INSERT INTO ccy(id, Abbreviation, Rate, last_updated) VALUES({idd}, '{abbr}', {ofcrate}, strftime("%s"))  
                                 on conflict (id) do update set Rate=excluded.Rate, last_updated = excluded.last_updated''')
         conn.commit()
         curs.execute(f'''SELECT Rate FROM ccy 
