@@ -1,6 +1,6 @@
 import telebot
 from exchange import secrets
-import currency_try_except
+import currency
 
 
 bot = telebot.TeleBot(secrets.TOKEN)
@@ -66,7 +66,7 @@ def get_ex_callback(query):
 
 def send_exchange_result(message, ex_code):
     bot.send_chat_action(message.chat.id, 'typing')
-    ex = currency_try_except.inquiry(ex_code)
+    ex = currency.get_currency_rate(ex_code)
     bot.send_message(
         message.chat.id, serialize_ex(ex, ex_code),
         parse_mode='HTML'
