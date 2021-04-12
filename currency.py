@@ -1,6 +1,7 @@
 import sqlite3
 import pb
-CACHE_AGE = 15  # update time in seconds
+import os
+CACHE_AGE = int(os.getenv('TGBOT_CACHE_MAXAGE', 3600))
 
 
 def get_currency_rate(currency_name):
