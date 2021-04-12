@@ -1,12 +1,14 @@
 import sqlite3
 import pb
 import os
+import logging
+
 CACHE_AGE = int(os.getenv('TGBOT_CACHE_MAXAGE', 3600))
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.DEBUG)
 
 
 def get_currency_rate(currency_name):
     try:
-        print('проверка(с базы обновл)')
         return read_cached_currency_rate(currency_name, CACHE_AGE)
     except:
         return get_currency_rate2(currency_name)
@@ -16,10 +18,8 @@ def get_currency_rate2(currency_name):
     try:
         rate = get_network_currency_rate(currency_name)
         store_currency_rate(currency_name, rate)
-        print('проверка(с сайта)')
         return rate
     except:
-        print('проверка(с базы необновл)')
         return read_cached_currency_rate(currency_name)
 
 
@@ -40,17 +40,20 @@ def read_cached_currency_rate(currency_name, cache = None):
     if cache == None:
         curs.execute(f'''SELECT Rate FROM ccy 
                                 WHERE Abbreviation = '{currency_name}' ''')
+        logging.info('not updated value from base')
     else:
         curs.execute(f'''SELECT Rate FROM ccy 
                         WHERE Abbreviation = '{currency_name}' and (strftime('%s') - last_updated <= {cache})''')
     value = curs.fetchall()
     if value:
+        logging.info('updated value from base')
         return value[0][0]
     raise LookupError
 
 
 def get_network_currency_rate(currency_name):
     idd, abbr, ofcrate = pb.get_exchanges(currency_name)
+    logging.info('updated value from site')
     return ofcrate
 
 
