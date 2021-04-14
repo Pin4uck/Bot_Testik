@@ -23,7 +23,7 @@
 
 ### Как установить?
 
-* установить требуемые библиотеки: "pip3 install -U requirements.txt"
+* в консоли или среде разработки: "pip3 install -U requirements.txt"
 
 ### Как запустить?
 
