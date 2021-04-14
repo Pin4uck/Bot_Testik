@@ -1,9 +1,9 @@
 import telebot
-from exchange import secrets
+import secret
 import currency
 
 
-bot = telebot.TeleBot(secrets.TOKEN)
+bot = telebot.TeleBot(secret.TOKEN)
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
 keyboard1.row('Привет', 'Пока')
 
