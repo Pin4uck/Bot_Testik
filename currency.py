@@ -53,7 +53,7 @@ def read_cached_currency_rate(currency_name, cache = None):
 
 
 def get_network_currency_rate(currency_name):
-    try
+    try:
         abbr, ofcrate = pb.get_exchanges(currency_name)
         logging.debug('updated value from site')
         return ofcrate
