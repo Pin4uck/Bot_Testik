@@ -53,11 +53,14 @@ def read_cached_currency_rate(currency_name, cache = None):
 
 
 def get_network_currency_rate(currency_name):
-    idd, abbr, ofcrate = pb.get_exchanges(currency_name)
-    logging.debug('updated value from site')
-    return ofcrate
+    try
+        abbr, ofcrate = pb.get_exchanges(currency_name)
+        logging.debug('updated value from site')
+        return ofcrate
+    except Exception as e:
+        return e
 
-
+    
 def store_currency_rate(currency_name, rate):
     dbconn = sqlite3.connect('currency.db')
     dbconn.execute(f'''INSERT INTO ccy(Abbreviation, Rate, last_updated) VALUES('{currency_name}', {rate}, strftime("%s"))  
