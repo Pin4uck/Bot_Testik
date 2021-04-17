@@ -55,7 +55,8 @@ def read_cached_currency_rate(currency_name, cache = None):
 
     
 def store_currency_rate(currency_name, rate):
-    dbconn = sqlite3.connect('currency.db')
-    dbconn.execute(f'''INSERT INTO ccy(Abbreviation, Rate, last_updated) VALUES('{currency_name}', {rate}, strftime("%s"))  
+    curs = dbcursor()
+    curs = sqlite3.connect('currency.db')
+    curs.execute(f'''INSERT INTO ccy(Abbreviation, Rate, last_updated) VALUES('{currency_name}', {rate}, strftime("%s"))  
                         on conflict (Abbreviation) do update set Rate=excluded.Rate, last_updated = excluded.last_updated''')
-    dbconn.commit()
+    curs.commit()
