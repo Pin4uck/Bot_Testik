@@ -17,9 +17,11 @@ def get_currency_rate(currency_name):
 
 def get_currency_rate2(currency_name):
     try:
-        rate = get_network_currency_rate(currency_name)
-        store_currency_rate(currency_name, rate)
-        return rate
+        rate = pb.get_exchanges(currency_name)
+        if rate:
+            store_currency_rate(currency_name, rate)
+            logging.debug('updated value from site')
+            return rate
     except:
         return read_cached_currency_rate(currency_name)
 
@@ -50,15 +52,6 @@ def read_cached_currency_rate(currency_name, cache = None):
         logging.debug('updated value from base')
         return value[0][0]
     raise LookupError
-
-
-def get_network_currency_rate(currency_name):
-    try:
-        abbr, ofcrate = pb.get_exchanges(currency_name)
-        logging.debug('updated value from site')
-        return ofcrate
-    except Exception as e:
-        return e
 
     
 def store_currency_rate(currency_name, rate):
