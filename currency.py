@@ -18,10 +18,9 @@ def get_currency_rate(currency_name):
 def get_currency_rate2(currency_name):
     try:
         rate = pb.get_exchanges(currency_name)
-        if rate:
-            store_currency_rate(currency_name, rate)
-            logging.debug('updated value from site')
-            return rate
+        store_currency_rate(currency_name, rate)
+        logging.debug('updated value from site')
+        return rate
     except:
         return read_cached_currency_rate(currency_name)
 
