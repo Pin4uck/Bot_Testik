@@ -4,7 +4,7 @@ import os
 import logging
 
 CACHE_AGE = int(os.getenv('TGBOT_CACHE_MAXAGE', 3600))
-LOG_LEVEL = os.getenv("TGBOT_LOGLEVEL", logging.WARNING)
+LOG_LEVEL = os.getenv("TGBOT_LOGLEVEL", "WARNING")
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=LOG_LEVEL)
 
 
