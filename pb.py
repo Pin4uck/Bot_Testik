@@ -18,9 +18,8 @@ def get_exchange(ccy_key):
 
 
 def get_exchanges(ccy_pattern):
-    result = []
     ccy_pattern = re.escape(ccy_pattern) + '.*'
     for exc in load_exchange():
         if re.match(ccy_pattern, exc['Cur_Abbreviation'], re.IGNORECASE) is not None:
-            result.append(exc)
-    return result[0]['Cur_OfficialRate']
+            return exc['Cur_OfficialRate']
+    raise LookupError(ccy_pattern)
