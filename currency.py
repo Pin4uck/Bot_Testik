@@ -50,7 +50,6 @@ def read_cached_currency_rate(currency_name, cache = None):
         value = curs.fetchall()
         if value:
             logging.debug('updated value from base')
-    value = curs.fetchall()
     if value:
         return value[0][0]
     raise LookupError
