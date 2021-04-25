@@ -71,7 +71,7 @@ def read_cached_currency_rate(currency_name, cache = None):
 
 
 def store_currency_rate(currency_name, rate):
-    """Данная функция вночит в базу данных необходимое значение"""
+    """Данная функция вноcит в базу данных необходимое значение"""
     curs, conn = dbcursor()
     curs.execute(f'''INSERT INTO ccy(Abbreviation, Rate, last_updated)
                     VALUES('{currency_name}', {rate}, strftime("%s"))
